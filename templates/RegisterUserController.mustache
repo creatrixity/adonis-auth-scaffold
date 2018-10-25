@@ -1,0 +1,28 @@
+"use strict";
+
+const Persona = use("Persona");
+
+class RegisterUserController {
+  /**
+   * Registers a new user using Adonis-Persona.
+   *
+   * @method store
+   *
+   * @param  {Object} request
+   * @param  {Object} auth
+   * @param  {Object} response
+   *
+   * @return {void}
+   */
+  store({ request, auth, response }) {
+    const payload = request.only(['email', 'username', 'password', 'password_confirmation'])
+
+    const user = await Persona.register(payload)
+
+    // optional
+    await auth.login(user)
+    response.redirect('/dashboard')
+  }
+}
+
+module.exports = RegisterUserController;
