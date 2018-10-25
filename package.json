@@ -4,6 +4,7 @@
   "description": "Painless authentication scaffolding for your Adonis.js app available to you in one sexy command.",
   "main": "index.js",
   "dependencies": {
+    "@adonisjs/ace": "^5.0.8",
     "@adonisjs/persona": "^1.0.5"
   },
   "devDependencies": {},
