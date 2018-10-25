@@ -1,12 +1,16 @@
 {
   "name": "adonis-auth-scaffold",
   "version": "1.0.0",
-  "description": "Painless head-starts to authentication for your Adonis.js app in a single click.",
+  "description": "Painless authentication scaffolding for your Adonis.js app available to you in one sexy command.",
   "main": "index.js",
   "dependencies": {
-    "@adonisjs/persona": "^1.0.5"
+    "@adonisjs/persona": "^1.0.5",
+    "adonis-fold": "^3.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@adonisjs/ace": "^5.0.0",
+    "@adonisjs/fold": "^4.0.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,5 +20,6 @@
     "full-stack"
   ],
   "author": "Caleb Mathew <creatrixity@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": "https://github.com/creatrixity/adonis-auth-scaffold"
 }
