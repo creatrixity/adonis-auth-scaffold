@@ -1,7 +1,7 @@
 {
   "name": "adonis-auth-scaffold",
   "version": "1.0.0",
-  "description": "Painless head-starts to authentication for your Adonis.js app in a single click.",
+  "description": "Painless authentication scaffolding for your Adonis.js app available to you in one sexy command.",
   "main": "index.js",
   "dependencies": {
     "@adonisjs/persona": "^1.0.5"
