@@ -13,7 +13,7 @@ const { ServiceProvider } = require("@adonisjs/fold");
 
 class AdonisAuthScaffoldProvider extends ServiceProvider {
   /**
-   * Setup commands for the auth scaffolder.
+   * Setup scaffold command for authentications.
    *
    * @method _setupScaffoldCommand
    *
@@ -39,8 +39,7 @@ class AdonisAuthScaffoldProvider extends ServiceProvider {
   }
 
   /**
-   * When provider is booted, fold will call
-   * this method
+   * When provider is booted, fold will call this method.
    *
    * @method boot
    *
