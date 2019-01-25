@@ -42,6 +42,9 @@ src
 
 ### About Adonis Auth Scaffold.
 
+Adonis Auth Scaffold is a CLI utility that gives you a functional authentication system in Adonis.js
+within seconds.
+
 ## Installation
 
 Simply run,

@@ -80,7 +80,7 @@ class MakeAuth extends Command {
   }
 
   _getFilePath() {
-    return path.join(process.cwd(), "app/Controllers/Auth");
+    return path.join(process.cwd(), "app/Controllers/Http/Auth");
   }
 
   /**
@@ -105,7 +105,7 @@ class MakeAuth extends Command {
     try {
       this._ensureInProjectRoot();
       await this._generateRegisterController(filePath, name);
-      this.completed("make:auth", incrementalPath);
+      this.completed("Created", incrementalPath);
 
       /**
        * Return testPath if command executed programatically

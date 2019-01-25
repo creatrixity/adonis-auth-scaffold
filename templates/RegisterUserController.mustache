@@ -1,6 +1,7 @@
 "use strict";
 
-const Persona = use("Persona");
+const Persona = use('Persona')
+use Config = use('Config')
 
 class RegisterUserController {
   /**
@@ -21,7 +22,7 @@ class RegisterUserController {
 
     // optional
     await auth.login(user)
-    response.redirect('/dashboard')
+    response.redirect(Config.get('AdonisAuthScaffold.registrationSuccessRedirectURL'))
   }
 }
 
