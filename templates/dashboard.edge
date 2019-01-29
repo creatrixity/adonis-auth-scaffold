@@ -1,0 +1,15 @@
+@layout('layouts.auth')
+@section('view-title')
+Dashboard
+@endsection
+@section('content')
+  <section class="auth-form-wrapper">
+    <div class="auth-form-container">
+      <p class="auth-form-title">Signed in as <b>{{ auth.user.username }}</b></p>
+
+      <section class="text-center">
+        <a href="{{ Config.get('adonis-auth-scaffold.logoutRoute') }}" class="auth-form-group-button">Logout</a>
+      </section> <!-- End .auth-form-group -->
+    </div>
+  </section><!-- End .auth-form-wrapper -->
+@endsection
