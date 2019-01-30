@@ -1,0 +1,52 @@
+@layout('layouts.auth')
+@section('view-title')
+Login
+@endsection
+@section('content')
+  <section class="auth-form-wrapper">
+    <div class="auth-form-container">
+      <form action="{{ Config.get('adonis-auth-scaffold.loginRoute') }}" method="post" class="auth-form">
+          <input name="_csrf" type="hidden" value="{{ csrfToken }}" />
+          <h1 class="auth-form-title">Login</h1>
+
+          <section class="auth-form-group">
+            <label class="auth-form-label">
+              <span class="auth-form-label-text">Username or E-mail</span>
+              <input name="uid" value="{{ old('uid', '') }}" type="text" class="auth-form-control" />
+              @if(hasErrorFor('uid'))
+              <p class="auth-form-error-text">{{ getErrorFor('uid') }}</p>
+              @endif
+            </label>
+          </section> <!-- End .auth-form-group -->
+
+          <section class="auth-form-group">
+            <label>
+              <span class="auth-form-label-text">Password</span>
+              <input name="password" type="password" class="auth-form-control" />
+              @if(hasErrorFor('password'))
+              <p class="auth-form-error-text">{{ getErrorFor('password') }}</p>
+              @endif
+            </label>
+          </section> <!-- End .auth-form-group -->
+
+          <section class="auth-form-group">
+            <button type="submit" class="auth-form-group-button auth-form-group-button--block">Login</button>
+          </section> <!-- End .auth-form-group -->
+
+          <section class="auth-form-group text-center">
+            <div>
+              <a href="{{ Config.get('adonis-auth-scaffold.passwordResetRoute') }}" class="auth-form-link">
+                Forgot Password?
+              </a>
+            </div>
+
+            <div>
+              <a href="{{ Config.get('adonis-auth-scaffold.registrationRoute') }}" class="auth-form-link">
+                Sign up
+              </a>
+            </div>
+          </section> <!-- End .auth-form-group -->
+      </form>
+    </div>
+  </section><!-- End .auth-form-wrapper -->
+@endsection
