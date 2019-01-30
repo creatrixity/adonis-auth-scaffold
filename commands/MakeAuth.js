@@ -9,6 +9,7 @@
 
 const _ = require("lodash");
 const path = require("path");
+const packageNamespace = 'adonis-auth-scaffold';
 
 const Helpers = use('Helpers')
 
@@ -66,7 +67,6 @@ class MakeAuth extends Command {
    * @returns {Void} 
    */
   copyAuthController () {
-    this.info('Creating Controllers/HTTP/AuthController.js')
     this.copy(
       path.join(__dirname, '../templates', 'AuthController.js'),
       path.join(Helpers.appRoot(), 'app/Controllers/HTTP/AuthController.js')
@@ -82,8 +82,8 @@ class MakeAuth extends Command {
   async copyConfig () {
     try {
       await this.copy(
-        path.join(__dirname, 'templates', `${packageNamespace}.mustache`),
-        path.join(Helpers.configDir(), `${packageNamespace}.js`)
+        path.join(__dirname, '../templates', `${packageNamespace}.mustache`),
+        path.join(Helpers.configPath(), `${packageNamespace}.js`)
       )
       this.success(`Created config/${packageNamespace}.js`)
     } catch (error) {
@@ -99,7 +99,7 @@ class MakeAuth extends Command {
   async copyAuthStyles () {
     try {
       await this.copy(
-        path.join(__dirname, 'templates', 'auth-styles.css'),
+        path.join(__dirname, '../templates', 'auth-styles.css'),
         path.join(Helpers.publicPath(), 'auth/auth-styles.css')
       )
       this.success('Successfully created public/auth/auth-styles.css')
@@ -116,16 +116,39 @@ class MakeAuth extends Command {
   async copyEmailViewTemplates () {
     try {
       await this.copy(
-        path.join(__dirname, 'templates', 'password-mail.edge'),
+        path.join(__dirname, '../templates', 'password-mail.edge'),
         path.join(Helpers.viewsPath(), 'auth/emails/password.edge')
       )
       await this.copy(
-        path.join(__dirname, 'templates', 'welcome-mail.edge'),
+        path.join(__dirname, '../templates', 'welcome-mail.edge'),
         path.join(Helpers.viewsPath(), 'auth/emails/welcome-mail.edge')
       )
 
       this.success('Created resources/views/auth/emails/password.edge')
       this.success('Created resources/views/auth/emails/welcome-mail.edge')
+    } catch (error) {
+      // ignore error
+    }
+  }
+
+  /**
+   * Creates the partials view templates.
+   * 
+   * @returns {Void} 
+   */
+  async copyPartialsViewTemplates () {
+    try {
+      await this.copy(
+        path.join(__dirname, '../templates', 'password-reset-request-form.edge'),
+        path.join(Helpers.viewsPath(), 'auth/partials/password-reset-request-form.edge')
+      )
+      await this.copy(
+        path.join(__dirname, '../templates', 'password-change-form.edge'),
+        path.join(Helpers.viewsPath(), 'auth/partials/password-change-form.edge')
+      )
+
+      this.success('Created resources/views/auth/partials/password-reset-request-form.edge')
+      this.success('Created resources/views/auth/partials/password-change-form.edge')
     } catch (error) {
       // ignore error
     }
@@ -139,19 +162,19 @@ class MakeAuth extends Command {
   async copyAuthViewTemplates () {
     try {
       await this.copy(
-        path.join(__dirname, 'templates', 'dashboard.edge'),
+        path.join(__dirname, '../templates', 'dashboard.edge'),
         path.join(Helpers.viewsPath(), 'auth/dashboard.edge')
       )
       await this.copy(
-        path.join(__dirname, 'templates', 'login.edge'),
+        path.join(__dirname, '../templates', 'login.edge'),
         path.join(Helpers.viewsPath(), 'auth/login.edge')
       )
       await this.copy(
-        path.join(__dirname, 'templates', 'register.edge'),
+        path.join(__dirname, '../templates', 'register.edge'),
         path.join(Helpers.viewsPath(), 'auth/register.edge')
       )
       await this.copy(
-        path.join(__dirname, 'templates', 'password-reset.edge'),
+        path.join(__dirname, '../templates', 'password-reset.edge'),
         path.join(Helpers.viewsPath(), 'auth/password-reset.edge')
       )
 
@@ -172,7 +195,7 @@ class MakeAuth extends Command {
   async copyLayoutViewTemplates () {
     try {
       await this.copy(
-        path.join(__dirname, 'templates', 'authLayout.edge'),
+        path.join(__dirname, '../templates', 'authLayout.edge'),
         path.join(Helpers.viewsPath(), 'layouts/auth.edge')
       )
       this.success('Created resources/views/layouts/auth.edge')
@@ -189,16 +212,33 @@ class MakeAuth extends Command {
   async copyAppStarterFiles () {
     try {
       await this.copy(
-        path.join(__dirname, 'templates', 'authRoutes.js'),
-        path.join(Helpers.basePath(), 'start/authRoutes.js')
+        path.join(__dirname, '../templates', 'authRoutes.js'),
+        path.join(Helpers.appRoot(), 'start/authRoutes.js')
       )
       await this.copy(
-        path.join(__dirname, 'templates', 'events.js'),
-        path.join(Helpers.basePath(), 'start/authEvents.js')
+        path.join(__dirname, '../templates', 'events.js'),
+        path.join(Helpers.appRoot(), 'start/authEvents.js')
       )
 
       this.success('Created start/authRoutes.js')
       this.success('Created start/authEvents.js')
+    } catch (error) {
+      // ignore error
+    }
+  }
+  
+  /**
+   * Creates the app starter files available at app/start.
+   * 
+   * @returns {Void} 
+   */
+  async copyMiddlewareFiles () {
+    try {
+      await this.copy(
+        path.join(__dirname, '../templates', 'ViewHelper.js'),
+        path.join(Helpers.appRoot(), 'app/Middleware/ViewHelper.js')
+      )
+      this.success('Created app/Middleware/ViewHelper.js')
     } catch (error) {
       // ignore error
     }
@@ -210,13 +250,15 @@ class MakeAuth extends Command {
    * @returns {Void} 
    */
   async _copyFiles () {
-    this.copyAuthController();
-    // await this.copyConfig()
-    // await this.copyAuthStyles()
-    // await this.copyEmailViewTemplates()
-    // await this.copyAuthViewTemplates()
-    // await this.copyLayoutViewTemplates()
-    // await this.copyAppStarterFiles()
+    await this.copyAuthController();
+    await this.copyConfig()
+    await this.copyAuthStyles()
+    await this.copyEmailViewTemplates()
+    await this.copyPartialsViewTemplates()
+    await this.copyAuthViewTemplates()
+    await this.copyLayoutViewTemplates()
+    await this.copyAppStarterFiles()
+    await this.copyMiddlewareFiles()
   }
 
   /**
@@ -225,12 +267,9 @@ class MakeAuth extends Command {
    *
    * @method handle
    *
-   * @param  {Boolean} options.slim
-   * @param  {Boolean} options.full
-   *
    * @return {void}
    */
-  async handle({}, { slim, full }) {
+  async handle({}, {}) {
     try {
       await this._ensureInProjectRoot();
       await this._copyFiles();

@@ -28,22 +28,6 @@ class AdonisAuthScaffoldProvider extends ServiceProvider {
   }
 
   /**
-   * Setup scaffold command for authentications.
-   *
-   * @method _setupScaffoldCommand
-   *
-   * @return {void}
-   *
-   * @private
-   */
-  _setupViewHelperMiddleware() {
-    this.app.bind("AdonisAuthScaffold/Middleware/ViewHelper", (app) => {
-      const ViewHelper = require('../src/Middleware/ViewHelper')
-      return new ViewHelper()
-    });
-  }
-
-  /**
    * Registers IOC bindings for this package.
    *
    * @method register
@@ -52,7 +36,6 @@ class AdonisAuthScaffoldProvider extends ServiceProvider {
    */
   register() {
     this._setupScaffoldCommand();
-    this._setupViewHelperMiddleware();
   }
 
   /**

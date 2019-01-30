@@ -1,27 +1,67 @@
-## Register provider.
+## Getting Started with Adonis Auth Scaffold.
 
-The provider must be registered as an `aceProvider`. We are only running CLI commands after all!
+Thanks for using Adonis auth scaffold.
+
+### Register providers.
+
+The `adonis-auth-scaffold` provider must be registered as an `aceProvider`.
+We are running CLI commands after all!
 
 ```js
 const aceProviders = [
-  "adonis-auth-scaffold/providers/AdonisAuthScaffoldProvider"
+  'adonis-auth-scaffold/providers/AdonisAuthScaffoldProvider'
 ];
 ```
 
+Also add providers for the newly installed dependencies.
 
+```js
+const providers = [
+  "@adonisjs/validator/providers/ValidatorProvider",
+  "@adonisjs/mail/providers/MailProvider",
+  "@adonisjs/persona/providers/PersonaProvider"
+]
+```
 
-## Scaffolding your first app.
+### Register Middleware
 
-To scaffold authentication, run
+Register the below middleware in `start/kernel.js`
 
-```bash
+```js
+const globalMiddleware = [
+  "App/Middleware/ViewHelper"
+]
+```
+
+### Generating auth scaffold.
+
+Please run the below command to scaffold authentication.
+
+```js
 adonis make:auth
 ```
 
-## Getting help.
+### Routes
 
-For help, run
+Please add the following line at the beginning of `start/routes.js`.
 
-```bash
-adonis test --help
+```js
+require('./authRoutes');
+```
+
+### Events
+
+Please add the following line at the beginning of `start/events.js`.
+
+```js
+require('./authEvents');
+```
+
+### Migrations
+
+Run the following command to run startup migrations.
+Please remember to add the `status` column to your User migration.
+
+```js
+adonis migration:run
 ```

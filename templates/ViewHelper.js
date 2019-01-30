@@ -2,7 +2,7 @@
 const Config = use("Config");
 
 class ViewHelper {
-  async handle({ request, view }, next) {
+  async handle({ view }, next) {
     view.share({
       Config: Config
     });
