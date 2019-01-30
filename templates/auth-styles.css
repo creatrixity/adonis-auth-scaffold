@@ -1,0 +1,167 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300");
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 300;
+  background-image: url("/splash.png");
+  background-color: #220052;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.auth-form-wrapper {
+  width: 450px;
+  margin: auto;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+}
+
+.auth-form-container {
+  border-radius: 15px;
+  width: 450px;
+  padding: 15px 0;
+  background: #fff;
+  letter-spacing: 0.5;
+  opacity: 0;
+  animation: slideFormDown 1s cubic-bezier(0.19, 1, 0.3, 1) 0.5s forwards;
+}
+
+.auth-form {
+  margin: 0 auto;
+  display: block;
+  width: 90%;
+}
+
+.auth-form-notice {
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 5px;
+  background: #ff8c44;
+  color: #fff;
+  font-weight: bold;
+}
+
+.auth-form-title {
+  text-align: center;
+  opacity: 0;
+  padding: 30px 0;
+  font-size: 1.5em;
+  animation: slideDown 2s cubic-bezier(0.19, 1, 0.3, 1) 0.2s forwards;
+}
+
+.auth-form-label-text {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.auth-form-group {
+  margin-bottom: 15px;
+  width: 100%;
+  animation: slideDown 2s cubic-bezier(0.19, 1, 0.3, 1) 0.2s forwards;
+}
+
+.auth-form-label {
+  display: block;
+}
+
+.auth-form-control {
+  width: 100%;
+  appearance: none;
+  font-size: 18px;
+  background: #fafafa;
+  outline: none;
+  border: 1px solid #ccc;
+  height: 45px;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.auth-form-group-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: inline-block;
+  cursor: pointer;
+  padding: 15px 25px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #efefef;
+  outline: none;
+  border: 1px solid #efefef;
+  color: #fff;
+  background: rgb(251, 47, 81);
+}
+
+.auth-form-group-button.auth-form-group-button--block {
+  width: 100%;
+}
+
+.auth-form-link,
+.auth-form-group-button {
+  text-decoration: none;
+}
+
+.auth-form-link {
+  padding: 5px 10px;
+  color: rgb(34, 0, 82);
+}
+
+.auth-form-link,
+.auth-form-error-text {
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.auth-form-error-text {
+  color: rgb(251, 47, 81);
+}
+
+.text-center {
+  text-align: center;
+}
+
+@keyframes slideFormDown {
+  0% {
+    transform: translateY(400px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.2%;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(400px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.2%;
+  }
+  100% {
+    opacity: 1;
+  }
+}
