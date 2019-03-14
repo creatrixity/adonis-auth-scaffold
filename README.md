@@ -104,6 +104,8 @@ const globalMiddleware = [
 
 ### Generating auth scaffold.
 
+![Auth Scaffold Gif](https://user-images.githubusercontent.com/5021686/54365412-10485200-466f-11e9-8fb5-cbaa920c6950.gif)
+
 Please run the below command to scaffold authentication.
 
 ```js
