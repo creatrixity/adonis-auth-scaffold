@@ -20,6 +20,7 @@
     "full-stack"
   ],
   "author": "Caleb Mathew <creatrixity@gmail.com>",
-  "license": "ISC",
-  "repository": "https://github.com/creatrixity/adonis-auth-scaffold"
+  "license": "GPL-3.0",
+  "repository": "https://github.com/creatrixity/adonis-auth-scaffold",
+  "private": false
 }
