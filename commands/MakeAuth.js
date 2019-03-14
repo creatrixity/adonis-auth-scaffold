@@ -26,7 +26,11 @@ class MakeAuth extends Command {
    */
   /* istanbul ignore next */
   static get signature() {
-    return `make:auth`;
+    return `
+      make:auth
+      { --api-only : Generates files for RESTful Apis. }
+      { --http-only : Generates files for HTTP client request. }
+    `;
   }
 
   /* istanbul ignore next */
@@ -63,8 +67,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the AuthController.js file.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   copyAuthController () {
     this.copy(
@@ -76,8 +80,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the adonis-auth-scaffold.js config file.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyConfig () {
     try {
@@ -93,8 +97,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the auth-styles.css file.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyAuthStyles () {
     try {
@@ -110,8 +114,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the email view templates files.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyEmailViewTemplates () {
     try {
@@ -133,8 +137,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the partials view templates.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyPartialsViewTemplates () {
     try {
@@ -156,8 +160,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the auth view templates.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyAuthViewTemplates () {
     try {
@@ -189,8 +193,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the layout view templates.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyLayoutViewTemplates () {
     try {
@@ -206,8 +210,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates the app starter files available at app/start.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyAppStarterFiles () {
     try {
@@ -226,11 +230,11 @@ class MakeAuth extends Command {
       // ignore error
     }
   }
-  
+
   /**
    * Creates the app starter files available at app/start.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async copyMiddlewareFiles () {
     try {
@@ -246,8 +250,8 @@ class MakeAuth extends Command {
 
   /**
    * Creates all scaffold templates.
-   * 
-   * @returns {Void} 
+   *
+   * @returns {Void}
    */
   async _copyFiles () {
     await this.copyAuthController();
@@ -269,7 +273,29 @@ class MakeAuth extends Command {
    *
    * @return {void}
    */
-  async handle({}, {}) {
+  async handle({}, {
+    apiOnly,
+    httpOnly
+  }) {
+    let client;
+
+    if (!apiOnly && !httpOnly) {
+      client = await this
+        .choice('Will this be used for a REST Api or for a HTTP Client?', [
+          {
+            name: 'For REST Api',
+            value: 'api'
+          }, {
+            name: 'For HTTP',
+            value: 'http'
+          }
+        ])
+    }
+
+    client = apiOnly ? 'api': 'http';
+
+    return console.log(client);
+
     try {
       await this._ensureInProjectRoot();
       await this._copyFiles();
