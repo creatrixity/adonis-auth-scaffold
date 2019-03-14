@@ -71,11 +71,17 @@ class MakeAuth extends Command {
    * @returns {Void}
    */
   copyHTTPAuthController () {
-    this.copy(
-      path.join(__dirname, '../templates', 'AuthController.js'),
-      path.join(Helpers.appRoot(), 'app/Controllers/HTTP/AuthController.js')
-    )
-    this.success('Created Controllers/HTTP/AuthController.js')
+    try {
+      this.copy(
+        path.join(__dirname, '../templates', 'AuthController.js'),
+        path.join(Helpers.appRoot(), 'app/Controllers/HTTP/AuthController.js')
+      )
+
+      this.success('Created Controllers/HTTP/AuthController.js')
+    } catch (error) {
+      // Output error message to console.
+      this.error(error);
+    }
   }
 
   /**
@@ -84,11 +90,16 @@ class MakeAuth extends Command {
    * @returns {Void}
    */
   copyApiAuthController () {
-    this.copy(
-      path.join(__dirname, '../templates', 'ApiAuthController.js'),
-      path.join(Helpers.appRoot(), 'app/Controllers/HTTP/ApiAuthController.js')
-    )
-    this.success('Created Controllers/HTTP/ApiAuthController.js')
+    try {
+      this.copy(
+        path.join(__dirname, '../templates', 'ApiAuthController.js'),
+        path.join(Helpers.appRoot(), 'app/Controllers/HTTP/ApiAuthController.js')
+      )
+      this.success('Created Controllers/HTTP/ApiAuthController.js')
+    } catch (error) {
+      // Output error to console.
+      this.error(error);
+    }
   }
 
   /**
@@ -104,7 +115,8 @@ class MakeAuth extends Command {
       )
       this.success(`Created config/${packageNamespace}.js`)
     } catch (error) {
-      // ignore error
+      // Output error to console.
+      this.error(error);
     }
   }
 
@@ -121,7 +133,8 @@ class MakeAuth extends Command {
       )
       this.success('Successfully created public/auth/auth-styles.css')
     } catch (error) {
-      // ignore error
+      // Output error to console.
+      this.error(error);
     }
   }
 
@@ -144,7 +157,8 @@ class MakeAuth extends Command {
       this.success('Created resources/views/auth/emails/password.edge')
       this.success('Created resources/views/auth/emails/welcome-mail.edge')
     } catch (error) {
-      // ignore error
+      // Output error to console.
+      this.error(error)
     }
   }
 
@@ -167,7 +181,8 @@ class MakeAuth extends Command {
       this.success('Created resources/views/auth/partials/password-reset-request-form.edge')
       this.success('Created resources/views/auth/partials/password-change-form.edge')
     } catch (error) {
-      // ignore error
+      // Output error to console.
+      this.error(error);
     }
   }
 
@@ -200,7 +215,7 @@ class MakeAuth extends Command {
       this.success('Create resources/views/auth/register.edge')
       this.success('Create resources/views/auth/password-reset.edge')
     } catch (error) {
-      // ignore error
+      this.error(error);
     }
   }
 
@@ -217,7 +232,8 @@ class MakeAuth extends Command {
       )
       this.success('Created resources/views/layouts/auth.edge')
     } catch (error) {
-      // ignore error
+      // Output error to console.
+      this.error(error);
     }
   }
 
@@ -251,7 +267,8 @@ class MakeAuth extends Command {
       this.success(authRoutesSuccessMessage)
       this.success('Created start/authEvents.js')
     } catch (error) {
-      // ignore error
+      // Output error to console.
+      this.error(error);
     }
   }
 
@@ -268,7 +285,7 @@ class MakeAuth extends Command {
       )
       this.success('Created app/Middleware/ViewHelper.js')
     } catch (error) {
-      // ignore error
+      this.error(error);
     }
   }
 
@@ -296,6 +313,30 @@ class MakeAuth extends Command {
   }
 
   /**
+   * Prepends a line of text to a provided file.
+   *
+   * @param {String} Object.filename - Fully qualified path of the file to be operated on.
+   * @param {Number} Object.lineNumber - Line to operate on.
+   * @param {String} Object.lineContent - Content to be prepended.
+   *
+   * @return {Void}
+   */
+  async _prependLineToFile ({
+    filename,
+    lineNumber,
+    lineContent
+  }) {
+    let fileContents = await this.readFile(filename, 'utf-8');
+    fileContents = fileContents.split("\n");
+
+    if (fileContents[lineNumber] === lineContent) return;
+
+    fileContents.splice(lineNumber, 0, `\n${lineContent}\n`)
+
+    await this.writeFile(filename, fileContents.join('\n'));
+  }
+
+  /**
    * Method executed by ace when command is called. It
    * will create a new sample test for the user.
    *
@@ -320,11 +361,21 @@ class MakeAuth extends Command {
             value: 'http'
           }
         ])
+    } else {
+      client = apiOnly ? 'api': 'http';
     }
 
-    client = apiOnly ? 'api': 'http';
-
     try {
+      // Write a module require statement to the routes.js file.
+      let routesFilePath = path.join(Helpers.appRoot(), 'start/routes.js');
+      let generatedRoutesFilename = apiOnly ? 'apiAuthRoutes.js': 'authRoutes.js';
+
+      await this._prependLineToFile({
+        filename: routesFilePath,
+        lineNumber: 2,
+        lineContent: `require('./${generatedRoutesFilename}');`
+      })
+
       await this._ensureInProjectRoot();
       await this._copyFiles(client);
     } catch (error) {
