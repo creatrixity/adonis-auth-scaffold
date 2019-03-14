@@ -19,6 +19,7 @@ app
 └── Controllers
     └── HTTP
         ├── AuthController.js
+        ├── ApiAuthController.js
 config
     ├── adonis-auth-scaffold.js
 public
@@ -42,6 +43,7 @@ resources
 start
     ├── authEvents.js
     ├── authRoutes.js
+    ├── apiAuthRoutes.js
 ```
 
 ## About Adonis Auth Scaffold.
@@ -108,12 +110,13 @@ Please run the below command to scaffold authentication.
 adonis make:auth
 ```
 
-### Routes
+A prompt to choose between generating code for a RESTful Api or a HTTP client allows you customize the generated files for your specific use case.
+Alternative versions of this command involves passing either the `--api-only` or `--http-only` flags.
 
-Please add the following line at the beginning of `start/routes.js`.
+To generate auth files for a REST Api, you may run:
 
 ```js
-require('./authRoutes');
+adonis make:auth --api-only
 ```
 
 ### Events
