@@ -66,16 +66,29 @@ class MakeAuth extends Command {
   }
 
   /**
-   * Creates the AuthController.js file.
+   * Creates the AuthController.js file for the HTTP client.
    *
    * @returns {Void}
    */
-  copyAuthController () {
+  copyHTTPAuthController () {
     this.copy(
       path.join(__dirname, '../templates', 'AuthController.js'),
       path.join(Helpers.appRoot(), 'app/Controllers/HTTP/AuthController.js')
     )
     this.success('Created Controllers/HTTP/AuthController.js')
+  }
+
+  /**
+   * Creates the ApiAuthController.js file for the HTTP client.
+   *
+   * @returns {Void}
+   */
+  copyApiAuthController () {
+    this.copy(
+      path.join(__dirname, '../templates', 'ApiAuthController.js'),
+      path.join(Helpers.appRoot(), 'app/Controllers/HTTP/ApiAuthController.js')
+    )
+    this.success('Created Controllers/HTTP/ApiAuthController.js')
   }
 
   /**
@@ -211,20 +224,31 @@ class MakeAuth extends Command {
   /**
    * Creates the app starter files available at app/start.
    *
+   * @param {String} client
    * @returns {Void}
    */
-  async copyAppStarterFiles () {
+  async copyAppStarterFiles (client) {
     try {
-      await this.copy(
-        path.join(__dirname, '../templates', 'authRoutes.js'),
-        path.join(Helpers.appRoot(), 'start/authRoutes.js')
-      )
+      if (client === 'http') {
+        await this.copy(
+          path.join(__dirname, '../templates', 'authRoutes.js'),
+          path.join(Helpers.appRoot(), 'start/authRoutes.js')
+        )
+      } else {
+        await this.copy(
+          path.join(__dirname, '../templates', 'apiAuthRoutes.js'),
+          path.join(Helpers.appRoot(), 'start/apiAuthRoutes.js')
+        )
+      }
+
       await this.copy(
         path.join(__dirname, '../templates', 'events.js'),
         path.join(Helpers.appRoot(), 'start/authEvents.js')
       )
 
-      this.success('Created start/authRoutes.js')
+      const authRoutesSuccessMessage = client ==='http' ? 'Created start/authRoutes.js': 'Created start/apiAuthRoutes.js';
+
+      this.success(authRoutesSuccessMessage)
       this.success('Created start/authEvents.js')
     } catch (error) {
       // ignore error
@@ -251,10 +275,16 @@ class MakeAuth extends Command {
   /**
    * Creates all scaffold templates.
    *
+   * @param {String} client - Specifies if we are generating for an API or HTTP client.
    * @returns {Void}
    */
-  async _copyFiles () {
-    await this.copyAuthController();
+  async _copyFiles (client) {
+    if (client === 'http') {
+      await this.copyHTTPAuthController();
+    } else {
+      await this.copyApiAuthController();
+    }
+
     await this.copyConfig()
     await this.copyAuthStyles()
     await this.copyEmailViewTemplates()
@@ -294,11 +324,9 @@ class MakeAuth extends Command {
 
     client = apiOnly ? 'api': 'http';
 
-    return console.log(client);
-
     try {
       await this._ensureInProjectRoot();
-      await this._copyFiles();
+      await this._copyFiles(client);
     } catch (error) {
       /**
        * Throw error if command executed programatically
