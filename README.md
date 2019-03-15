@@ -1,3 +1,5 @@
+![Adonis Auth Scaffold Logo](https://i.ibb.co/V9CvcGV/Adonis-Auth-Scaffold-Logo.png)
+
 # Adonis Auth Scaffold.
 
 Adonis auth scaffold offers you painless authentication built on top [Persona.js](https://github.com/adonisjs/persona) available within seconds.
