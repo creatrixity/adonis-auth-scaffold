@@ -8,8 +8,8 @@
     "adonis-fold": "^3.0.3"
   },
   "devDependencies": {
-    "@adonisjs/ace": "^5.0.0",
-    "@adonisjs/fold": "^4.0.5"
+    "@adonisjs/ace": "^6.0.0",
+    "@adonisjs/fold": "^6.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
