@@ -74,10 +74,10 @@ class MakeAuth extends Command {
     try {
       this.copy(
         path.join(__dirname, '../templates', 'AuthController.js'),
-        path.join(Helpers.appRoot(), 'app/Controllers/HTTP/AuthController.js')
+        path.join(Helpers.appRoot(), 'app/Controllers/Http/AuthController.js')
       )
 
-      this.success('Created Controllers/HTTP/AuthController.js')
+      this.success('Created Controllers/Http/AuthController.js')
     } catch (error) {
       // Output error message to console.
       this.error(error);
@@ -93,9 +93,9 @@ class MakeAuth extends Command {
     try {
       this.copy(
         path.join(__dirname, '../templates', 'ApiAuthController.js'),
-        path.join(Helpers.appRoot(), 'app/Controllers/HTTP/ApiAuthController.js')
+        path.join(Helpers.appRoot(), 'app/Controllers/Http/ApiAuthController.js')
       )
-      this.success('Created Controllers/HTTP/ApiAuthController.js')
+      this.success('Created Controllers/Http/ApiAuthController.js')
     } catch (error) {
       // Output error to console.
       this.error(error);
