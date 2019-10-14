@@ -290,6 +290,25 @@ class MakeAuth extends Command {
   }
 
   /**
+   * Creates a migration for users table. 
+   *
+   * @returns {Void}
+   */
+  async copyMigrationFiles () {
+    try {
+      const timestamp = new Date().getTime();
+      const newFileName = `database/migrations/${timestamp}_add_account_status_to_users_schema.js`;
+      await this.copy(
+        path.join(__dirname, '../templates', 'migration_add_account_status_to_users_schema.js'),
+        path.join(Helpers.appRoot(), newFileName)
+      )
+      this.success(`Created ${newFileName}`)
+    } catch (error) {
+      this.error(error);
+    }
+  }
+
+  /**
    * Creates all scaffold templates.
    *
    * @param {String} client - Specifies if we are generating for an API or HTTP client.
@@ -310,6 +329,7 @@ class MakeAuth extends Command {
     await this.copyLayoutViewTemplates()
     await this.copyAppStarterFiles()
     await this.copyMiddlewareFiles()
+    await this.copyMigrationFiles()
   }
 
   /**
