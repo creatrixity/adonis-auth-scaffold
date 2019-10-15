@@ -30,6 +30,7 @@ class MakeAuth extends Command {
       make:auth
       { --api-only : Generates files for RESTful Apis. }
       { --http-only : Generates files for HTTP client request. }
+      { --bootstrap : Generates views based on Bootstrap (only works with HTTP client request). }
     `;
   }
 
@@ -123,12 +124,13 @@ class MakeAuth extends Command {
   /**
    * Creates the auth-styles.css file.
    *
+   * @param {String} stylePath - Specifies a template subfolder to use for the views.
    * @returns {Void}
    */
-  async copyAuthStyles () {
+  async copyAuthStyles (stylePath) {
     try {
       await this.copy(
-        path.join(__dirname, '../templates', 'auth-styles.css'),
+        path.join(__dirname, '../templates', stylePath, 'auth-styles.css'),
         path.join(Helpers.publicPath(), 'auth/auth-styles.css')
       )
       this.success('Successfully created public/auth/auth-styles.css')
@@ -165,16 +167,17 @@ class MakeAuth extends Command {
   /**
    * Creates the partials view templates.
    *
+   * @param {String} stylePath - Specifies a template subfolder to use for the views.
    * @returns {Void}
    */
-  async copyPartialsViewTemplates () {
+  async copyPartialsViewTemplates (stylePath) {
     try {
       await this.copy(
-        path.join(__dirname, '../templates', 'password-reset-request-form.edge'),
+        path.join(__dirname, '../templates', stylePath, 'password-reset-request-form.edge'),
         path.join(Helpers.viewsPath(), 'auth/partials/password-reset-request-form.edge')
       )
       await this.copy(
-        path.join(__dirname, '../templates', 'password-change-form.edge'),
+        path.join(__dirname, '../templates', stylePath, 'password-change-form.edge'),
         path.join(Helpers.viewsPath(), 'auth/partials/password-change-form.edge')
       )
 
@@ -189,24 +192,25 @@ class MakeAuth extends Command {
   /**
    * Creates the auth view templates.
    *
+   * @param {String} stylePath - Specifies a template subfolder to use for the views.
    * @returns {Void}
    */
-  async copyAuthViewTemplates () {
+  async copyAuthViewTemplates (stylePath) {
     try {
       await this.copy(
-        path.join(__dirname, '../templates', 'dashboard.edge'),
+        path.join(__dirname, '../templates', stylePath, 'dashboard.edge'),
         path.join(Helpers.viewsPath(), 'auth/dashboard.edge')
       )
       await this.copy(
-        path.join(__dirname, '../templates', 'login.edge'),
+        path.join(__dirname, '../templates', stylePath, 'login.edge'),
         path.join(Helpers.viewsPath(), 'auth/login.edge')
       )
       await this.copy(
-        path.join(__dirname, '../templates', 'register.edge'),
+        path.join(__dirname, '../templates', stylePath, 'register.edge'),
         path.join(Helpers.viewsPath(), 'auth/register.edge')
       )
       await this.copy(
-        path.join(__dirname, '../templates', 'password-reset.edge'),
+        path.join(__dirname, '../templates', stylePath, 'password-reset.edge'),
         path.join(Helpers.viewsPath(), 'auth/password-reset.edge')
       )
 
@@ -222,12 +226,13 @@ class MakeAuth extends Command {
   /**
    * Creates the layout view templates.
    *
+   * @param {String} stylePath - Specifies a template subfolder to use for the views.
    * @returns {Void}
    */
-  async copyLayoutViewTemplates () {
+  async copyLayoutViewTemplates (stylePath) {
     try {
       await this.copy(
-        path.join(__dirname, '../templates', 'authLayout.edge'),
+        path.join(__dirname, '../templates', stylePath, 'authLayout.edge'),
         path.join(Helpers.viewsPath(), 'layouts/auth.edge')
       )
       this.success('Created resources/views/layouts/auth.edge')
@@ -293,21 +298,24 @@ class MakeAuth extends Command {
    * Creates all scaffold templates.
    *
    * @param {String} client - Specifies if we are generating for an API or HTTP client.
+   * @param {String} style - Specifies if we are using regular or Bootstrap views.
    * @returns {Void}
    */
-  async _copyFiles (client) {
+  async _copyFiles (client, style) {
     if (client === 'http') {
       await this.copyHTTPAuthController();
     } else {
       await this.copyApiAuthController();
     }
 
+    const stylePath = style == 'regular' ? '' : style;
+
     await this.copyConfig()
-    await this.copyAuthStyles()
+    await this.copyAuthStyles(stylePath)
     await this.copyEmailViewTemplates()
-    await this.copyPartialsViewTemplates()
-    await this.copyAuthViewTemplates()
-    await this.copyLayoutViewTemplates()
+    await this.copyPartialsViewTemplates(stylePath)
+    await this.copyAuthViewTemplates(stylePath)
+    await this.copyLayoutViewTemplates(stylePath)
     await this.copyAppStarterFiles()
     await this.copyMiddlewareFiles()
   }
@@ -346,9 +354,11 @@ class MakeAuth extends Command {
    */
   async handle({}, {
     apiOnly,
-    httpOnly
+    httpOnly,
+    bootstrap
   }) {
     let client;
+    let style;
 
     if (!apiOnly && !httpOnly) {
       client = await this
@@ -365,6 +375,23 @@ class MakeAuth extends Command {
       client = apiOnly ? 'api': 'http';
     }
 
+    if (client === 'http') {
+      if (!bootstrap) {
+        style = await this
+          .choice('Which style do you want to use for your views?', [
+            {
+              name: 'Regular Adonis Auth Scaffold views (looks like default welcome page)',
+              value: 'regular'
+            }, {
+              name: 'Bootstrap views',
+              value: 'bootstrap'
+            }
+          ])
+      } else {
+        style = 'bootstrap';
+      }
+    }
+
     try {
       // Write a module require statement to the routes.js file.
       let routesFilePath = path.join(Helpers.appRoot(), 'start/routes.js');
@@ -377,7 +404,7 @@ class MakeAuth extends Command {
       })
 
       await this._ensureInProjectRoot();
-      await this._copyFiles(client);
+      await this._copyFiles(client, style);
     } catch (error) {
       /**
        * Throw error if command executed programatically
