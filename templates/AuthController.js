@@ -59,6 +59,8 @@ class AuthController {
     } catch (error) {
       if (error.name === 'InvalidTokenException') {
         session.flash({ errorMessage: 'The token supplied is not valid.' })
+      } else {
+        session.flash({ errorMessage: error.message })
       }
     }
 
