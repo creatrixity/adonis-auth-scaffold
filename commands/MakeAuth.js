@@ -327,7 +327,7 @@ class MakeAuth extends Command {
     await this.copyPartialsViewTemplates()
     await this.copyAuthViewTemplates()
     await this.copyLayoutViewTemplates()
-    await this.copyAppStarterFiles()
+    await this.copyAppStarterFiles(client)
     await this.copyMiddlewareFiles()
     await this.copyMigrationFiles()
   }
