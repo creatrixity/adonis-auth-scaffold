@@ -295,6 +295,25 @@ class MakeAuth extends Command {
   }
 
   /**
+   * Creates a migration for users table. 
+   *
+   * @returns {Void}
+   */
+  async copyMigrationFiles () {
+    try {
+      const timestamp = new Date().getTime();
+      const newFileName = `database/migrations/${timestamp}_add_account_status_to_users_schema.js`;
+      await this.copy(
+        path.join(__dirname, '../templates', 'migration_add_account_status_to_users_schema.js'),
+        path.join(Helpers.appRoot(), newFileName)
+      )
+      this.success(`Created ${newFileName}`)
+    } catch (error) {
+      this.error(error);
+    }
+  }
+
+  /**
    * Creates all scaffold templates.
    *
    * @param {String} client - Specifies if we are generating for an API or HTTP client.
@@ -318,6 +337,7 @@ class MakeAuth extends Command {
     await this.copyLayoutViewTemplates(stylePath)
     await this.copyAppStarterFiles()
     await this.copyMiddlewareFiles()
+    await this.copyMigrationFiles()
   }
 
   /**
@@ -326,16 +346,23 @@ class MakeAuth extends Command {
    * @param {String} Object.filename - Fully qualified path of the file to be operated on.
    * @param {Number} Object.lineNumber - Line to operate on.
    * @param {String} Object.lineContent - Content to be prepended.
+   * @param {String} Object.afterContent - Finds a line with the content specified and adds the new line after it.
    *
    * @return {Void}
    */
   async _prependLineToFile ({
     filename,
     lineNumber,
-    lineContent
+    lineContent,
+    afterContent
   }) {
     let fileContents = await this.readFile(filename, 'utf-8');
     fileContents = fileContents.split("\n");
+
+    if (afterContent) {
+      const i = fileContents.findIndex(l => l.includes(afterContent))
+      if (i > 0) lineNumber = i + 1;
+    }
 
     if (fileContents[lineNumber] === lineContent) return;
 
@@ -401,6 +428,17 @@ class MakeAuth extends Command {
         filename: routesFilePath,
         lineNumber: 2,
         lineContent: `require('./${generatedRoutesFilename}');`
+      })
+
+      let tokenModelFilePath = path.join(Helpers.appRoot(), 'app/Models/Token.js');
+      let tokenModelContent = `  user () {
+    return this.belongsTo('App/Models/User')
+  }`;
+
+      await this._prependLineToFile({
+        filename: tokenModelFilePath,
+        afterContent: 'class Token',
+        lineContent: tokenModelContent
       })
 
       await this._ensureInProjectRoot();
