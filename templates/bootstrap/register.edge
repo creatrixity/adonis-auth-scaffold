@@ -1,0 +1,73 @@
+@layout('layouts.auth')
+@section('view-title')
+Register
+@endsection
+@section('content')
+  <form action="{{ Config.get('adonis-auth-scaffold.registrationRoute') }}" method="post" class="auth-form">
+    <input name="_csrf" type="hidden" value="{{ csrfToken }}" />
+    <h2>Create an account</h2>
+    <div class="form-inputs">
+      <div class="form-group required">
+        <label for="email" class="required">E-mail <abbr title="required">*</abbr></label>
+        <input
+          class="form-control required"
+          autofocus="autofocus"
+          type="email"
+          required="required"
+          aria-required="true"
+          value="{{ old('email', '') }}"
+          name="email"
+          id="email" />
+          @if(hasErrorFor('email'))
+            <small class="form-text text-danger">{{ getErrorFor('email') }}</small>
+          @endif
+      </div>
+      <div class="form-group required">
+        <label for="username" class="required">Username <abbr title="required">*</abbr></label>
+        <input
+          class="form-control required"
+          type="text"
+          required="required"
+          aria-required="true"
+          value="{{ old('username', '') }}"
+          name="username"
+          id="username" />
+          @if(hasErrorFor('username'))
+            <small class="form-text text-danger">{{ getErrorFor('username') }}</small>
+          @endif
+      </div>
+      <div class="form-group required">
+        <label for="password" class="required">Password <abbr title="required">*</abbr></label>
+        <input
+          class="form-control required"
+          type="password"
+          required="required"
+          aria-required="true"
+          name="password"
+          id="password" />
+          @if(hasErrorFor('password'))
+            <small class="form-text text-danger">{{ getErrorFor('password') }}</small>
+          @endif
+      </div>
+      <div class="form-group required">
+        <label for="password_confirmation" class="required">Password again <abbr title="required">*</abbr></label>
+        <input
+          class="form-control required"
+          type="password"
+          required="required"
+          aria-required="true"
+          name="password_confirmation"
+          id="password_confirmation" />
+          @if(hasErrorFor('password_confirmation'))
+            <small class="form-text text-danger">{{ getErrorFor('password_confirmation') }}</small>
+          @endif
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Register</button>
+      <a href="{{ Config.get('adonis-auth-scaffold.loginRoute') }}" class="btn btn-link">
+        Already registered? Login
+      </a>
+    </div>
+  </form>
+@endsection

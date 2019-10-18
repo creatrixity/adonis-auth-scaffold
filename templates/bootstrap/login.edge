@@ -1,0 +1,45 @@
+@layout('layouts.auth')
+@section('view-title')
+Login
+@endsection
+@section('content')
+  <form action="{{ Config.get('adonis-auth-scaffold.loginRoute') }}" method="post" class="auth-form">
+    <input name="_csrf" type="hidden" value="{{ csrfToken }}" />
+    <h2>Login</h2>
+    <div class="form-inputs">
+      <div class="form-group">
+        <label for="uid">Username or E-mail</label>
+        <input
+          class="form-control"
+          autofocus="autofocus"
+          type="text"
+          value="{{ old('uid', '') }}"
+          name="uid"
+          id="uid" />
+          @if(hasErrorFor('uid'))
+            <small class="form-text text-danger">{{ getErrorFor('uid') }}</small>
+          @endif
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          class="form-control"
+          type="password"
+          name="password"
+          id="password" />
+          @if(hasErrorFor('password'))
+            <small class="form-text text-danger">{{ getErrorFor('password') }}</small>
+          @endif
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Login</button>
+      <a href="{{ Config.get('adonis-auth-scaffold.passwordResetRoute') }}" class="btn btn-link">
+        Forgot your password?
+      </a>
+      <a href="{{ Config.get('adonis-auth-scaffold.registrationRoute') }}" class="btn btn-link">
+        Sign up
+      </a>
+    </div>
+  </form>
+@endsection
